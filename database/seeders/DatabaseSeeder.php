@@ -5,8 +5,11 @@ namespace Database\Seeders;
 use App\CustomerStatus;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
+use App\Models\Product;
 use App\Models\Tenant;
 use App\Models\User;
+use App\ProductStatus;
+use App\ProductType;
 use App\TenantStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -79,6 +82,30 @@ class DatabaseSeeder extends Seeder
             'state' => 'Maharashtra',
             'postal_code' => '400001',
             'is_default' => true,
+        ]);
+
+        Product::query()->create([
+            'tenant_id' => $tenant->id,
+            'name' => '20L Jar',
+            'sku' => 'JAR-20L',
+            'type' => ProductType::Jar,
+            'capacity_liters' => 20,
+            'unit_price' => 25,
+            'deposit_amount' => 300,
+            'is_returnable' => true,
+            'status' => ProductStatus::Active,
+        ]);
+
+        Product::query()->create([
+            'tenant_id' => $tenant->id,
+            'name' => '15L Jug',
+            'sku' => 'JUG-15L',
+            'type' => ProductType::Jar,
+            'capacity_liters' => 15,
+            'unit_price' => 50,
+            'deposit_amount' => 500,
+            'is_returnable' => true,
+            'status' => ProductStatus::Active,
         ]);
     }
 }
