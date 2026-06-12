@@ -48,6 +48,19 @@ class Tenant extends Model
     }
 
     /**
+     * @return HasMany<Customer, $this>
+     */
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */

@@ -105,6 +105,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $customer = Role::query()->firstOrCreate(['name' => 'customer', 'guard_name' => 'web']);
         $customer->syncPermissions([
             'customers.view',
+            'customers.addresses.manage',
             'products.view',
             'wallet.view',
             'deposits.view',

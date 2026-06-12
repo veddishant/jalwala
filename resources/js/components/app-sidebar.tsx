@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Users } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, UserRound, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,6 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { index as adminCustomersIndex } from '@/routes/admin/customers';
 import { index as adminUsersIndex } from '@/routes/admin/users';
 import { dashboard } from '@/routes';
 import type { Auth, NavItem } from '@/types';
@@ -33,6 +34,14 @@ function useMainNavItems(): NavItem[] {
             title: 'Users',
             href: adminUsersIndex(),
             icon: Users,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('customers.view')) {
+        items.push({
+            title: 'Customers',
+            href: adminCustomersIndex(),
+            icon: UserRound,
         });
     }
 

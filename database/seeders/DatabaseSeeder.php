@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\CustomerStatus;
+use App\Models\Customer;
+use App\Models\CustomerAddress;
 use App\Models\Tenant;
 use App\Models\User;
 use App\TenantStatus;
@@ -56,5 +59,26 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123456'),
         ]);
         $customerUser->assignRole('customer');
+
+        $customer = Customer::query()->create([
+            'tenant_id' => $tenant->id,
+            'user_id' => $customerUser->id,
+            'code' => 'CUST-0001',
+            'name' => 'Customer User',
+            'phone' => '9876543210',
+            'email' => 'customer@demo-water-supply.test',
+            'status' => CustomerStatus::Active,
+        ]);
+
+        CustomerAddress::query()->create([
+            'tenant_id' => $tenant->id,
+            'customer_id' => $customer->id,
+            'label' => 'Home',
+            'address_line_1' => '12 MG Road',
+            'city' => 'Mumbai',
+            'state' => 'Maharashtra',
+            'postal_code' => '400001',
+            'is_default' => true,
+        ]);
     }
 }
