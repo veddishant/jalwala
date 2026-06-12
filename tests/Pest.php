@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Tenant;
+use App\Models\User;
+use App\Support\TenantContext;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +48,26 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function seedRolesAndPermissions(): void
 {
-    // ..
+    test()->seed(RolesAndPermissionsSeeder::class);
 }
+
+/**
+ * @return array{tenant: Tenant, admin: User}
+ */
+function createSupplierAdmin(): array
+{
+    seedRolesAndPermissions();
+
+    $tenant = Tenant::factory()->create();
+
+    $admin = User::factory()->forTenant($tenant)->create();
+    $admin->assignRole('supplier-admin');
+
+    return compact('tenant', 'admin');
+}
+
+afterEach(function (): void {
+    TenantContext::clear();
+});
