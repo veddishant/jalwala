@@ -10,6 +10,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\ProductStatus;
 use App\ProductType;
+use App\Services\WalletService;
 use App\TenantStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -107,5 +108,12 @@ class DatabaseSeeder extends Seeder
             'is_returnable' => true,
             'status' => ProductStatus::Active,
         ]);
+
+        app(WalletService::class)->ensureForCustomer(
+            customer: $customer,
+            openingBalance: '500.00',
+            lowBalanceThreshold: '100.00',
+            createdBy: $supplierAdmin->id,
+        );
     }
 }

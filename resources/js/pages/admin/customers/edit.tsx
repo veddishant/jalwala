@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit, index } from '@/routes/admin/customers';
+import { edit, index, wallet } from '@/routes/admin/customers';
 
 type ManagedCustomer = {
     id: number;
@@ -55,8 +55,14 @@ export default function EditCustomer({
         <>
             <Head title={`Edit ${customer.name}`} />
 
+            <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 pt-4 md:px-6">
+                <Button asChild variant="outline" className="min-h-10">
+                    <Link href={wallet(customer.id)}>View wallet</Link>
+                </Button>
+            </div>
+
             {!isClosed && (
-                <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 pt-4 md:px-6">
+                <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 md:px-6">
                     {isActive && (
                         <Form
                             {...CustomerController.pause.form(customer.id)}

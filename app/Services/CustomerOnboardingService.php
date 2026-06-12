@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerOnboardingService
 {
+    public function __construct(
+        private WalletService $walletService,
+    ) {}
+
     /**
      * @param  array{
      *     name: string,
@@ -32,12 +36,16 @@ class CustomerOnboardingService
      *     portal?: array{
      *         create?: bool,
      *         password?: string
+     *     },
+     *     wallet?: array{
+     *         opening_balance?: string|null,
+     *         low_balance_threshold?: string|null
      *     }
      * }  $data
      */
-    public function onboard(array $data, int $tenantId): Customer
+    public function onboard(array $data, int $tenantId, ?int $createdBy = null): Customer
     {
-        return DB::transaction(function () use ($data, $tenantId): Customer {
+        return DB::transaction(function () use ($data, $tenantId, $createdBy): Customer {
             TenantContext::setId($tenantId);
 
             $customer = Customer::query()->create([
@@ -70,7 +78,21 @@ class CustomerOnboardingService
                 $customer->update(['user_id' => $user->id]);
             }
 
-            return $customer->load(['addresses', 'user']);
+            $openingBalance = isset($data['wallet']['opening_balance'])
+                ? number_format((float) $data['wallet']['opening_balance'], 2, '.', '')
+                : null;
+            $lowBalanceThreshold = isset($data['wallet']['low_balance_threshold'])
+                ? number_format((float) $data['wallet']['low_balance_threshold'], 2, '.', '')
+                : null;
+
+            $this->walletService->ensureForCustomer(
+                customer: $customer,
+                openingBalance: $openingBalance,
+                lowBalanceThreshold: $lowBalanceThreshold,
+                createdBy: $createdBy,
+            );
+
+            return $customer->load(['addresses', 'user', 'wallet']);
         });
     }
 

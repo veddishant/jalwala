@@ -153,7 +153,11 @@ class CustomerController extends Controller
                 'create' => $request->boolean('portal.create'),
                 'password' => $request->validated('portal.password'),
             ],
-        ], $tenantId);
+            'wallet' => [
+                'opening_balance' => $request->validated('wallet.opening_balance'),
+                'low_balance_threshold' => $request->validated('wallet.low_balance_threshold'),
+            ],
+        ], $tenantId, (int) $request->user()->id);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Customer created successfully.')]);
 

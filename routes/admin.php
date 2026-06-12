@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerWalletController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,19 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
             Route::post('customers/{managedCustomer}/close', [CustomerController::class, 'close'])
                 ->middleware('permission:customers.close')
                 ->name('customers.close');
+
+            Route::get('customers/{managedCustomer}/wallet', [CustomerWalletController::class, 'show'])
+                ->middleware('permission:wallet.view')
+                ->name('customers.wallet');
+            Route::post('customers/{managedCustomer}/wallet/top-up', [CustomerWalletController::class, 'topUp'])
+                ->middleware('permission:wallet.top-up')
+                ->name('customers.wallet.top-up');
+            Route::post('customers/{managedCustomer}/wallet/adjust', [CustomerWalletController::class, 'adjust'])
+                ->middleware('permission:wallet.adjust')
+                ->name('customers.wallet.adjust');
+            Route::patch('customers/{managedCustomer}/wallet/threshold', [CustomerWalletController::class, 'updateThreshold'])
+                ->middleware('permission:wallet.adjust')
+                ->name('customers.wallet.threshold');
         });
 
         Route::middleware('permission:products.view')->group(function (): void {

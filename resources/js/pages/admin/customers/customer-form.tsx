@@ -360,6 +360,49 @@ export default function CustomerForm({
                                             />
                                         </div>
                                     )}
+
+                                    <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="wallet.opening_balance">
+                                                Opening balance (INR)
+                                            </Label>
+                                            <Input
+                                                id="wallet.opening_balance"
+                                                name="wallet[opening_balance]"
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                className="min-h-11"
+                                            />
+                                            <InputError
+                                                message={
+                                                    errors[
+                                                        'wallet.opening_balance'
+                                                    ]
+                                                }
+                                            />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="wallet.low_balance_threshold">
+                                                Low balance alert (INR)
+                                            </Label>
+                                            <Input
+                                                id="wallet.low_balance_threshold"
+                                                name="wallet[low_balance_threshold]"
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                className="min-h-11"
+                                            />
+                                            <InputError
+                                                message={
+                                                    errors[
+                                                        'wallet.low_balance_threshold'
+                                                    ]
+                                                }
+                                            />
+                                        </div>
+                                    </div>
                             </div>
 
                             {isEditing &&

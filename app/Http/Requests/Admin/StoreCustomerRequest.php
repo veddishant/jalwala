@@ -54,6 +54,8 @@ class StoreCustomerRequest extends FormRequest
                 'string',
                 Password::defaults(),
             ],
+            'wallet.opening_balance' => ['nullable', 'numeric', 'min:0', 'max:9999999999.99'],
+            'wallet.low_balance_threshold' => ['nullable', 'numeric', 'min:0', 'max:9999999999.99'],
         ];
     }
 

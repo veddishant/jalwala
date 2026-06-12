@@ -85,4 +85,12 @@ class Customer extends Model
     {
         return $this->hasOne(CustomerAddress::class)->where('is_default', true);
     }
+
+    /**
+     * @return HasOne<Wallet, $this>
+     */
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
 }
