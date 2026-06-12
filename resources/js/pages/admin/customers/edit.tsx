@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit, index, wallet } from '@/routes/admin/customers';
+import { deposits, edit, index, wallet } from '@/routes/admin/customers';
 
 type ManagedCustomer = {
     id: number;
@@ -58,6 +58,9 @@ export default function EditCustomer({
             <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 pt-4 md:px-6">
                 <Button asChild variant="outline" className="min-h-10">
                     <Link href={wallet(customer.id)}>View wallet</Link>
+                </Button>
+                <Button asChild variant="outline" className="min-h-10">
+                    <Link href={deposits(customer.id)}>View deposits</Link>
                 </Button>
             </div>
 

@@ -110,6 +110,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'wallet.view',
             'wallet.view-ledger',
             'deposits.view',
+            'deposits.view-ledger',
             'subscriptions.view',
             'subscriptions.pause',
             'orders.view',

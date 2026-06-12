@@ -27,6 +27,7 @@ class WalletService
             $wallet = Wallet::query()->firstOrCreate(
                 ['customer_id' => $customer->id],
                 [
+                    'tenant_id' => $customer->tenant_id,
                     'balance' => '0.00',
                     'low_balance_threshold' => $lowBalanceThreshold,
                 ],
@@ -178,6 +179,7 @@ class WalletService
                 : bcsub($lockedWallet->balance, $amount, 2);
 
             $transaction = WalletTransaction::query()->create([
+                'tenant_id' => $lockedWallet->tenant_id,
                 'wallet_id' => $lockedWallet->id,
                 'type' => $type,
                 'category' => $category,

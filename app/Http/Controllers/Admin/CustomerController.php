@@ -11,6 +11,7 @@ use App\Models\CustomerAddress;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\CustomerOnboardingService;
+use App\Services\DepositService;
 use App\Support\TenantContext;
 use App\TenantStatus;
 use App\UserStatus;
@@ -25,6 +26,7 @@ class CustomerController extends Controller
 {
     public function __construct(
         private CustomerOnboardingService $onboardingService,
+        private DepositService $depositService,
     ) {}
 
     private function ensureTenantContext(Request $request): void
@@ -265,6 +267,13 @@ class CustomerController extends Controller
         if ($customer->user !== null) {
             $customer->user->update(['status' => UserStatus::Inactive]);
         }
+
+        $deposit = $this->depositService->ensureForCustomer($customer);
+        $this->depositService->refundAll(
+            deposit: $deposit,
+            createdBy: (int) $request->user()->id,
+            description: 'Full deposit refund on customer closure',
+        );
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Customer closed successfully.')]);
 

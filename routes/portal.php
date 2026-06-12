@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Portal\DepositController;
 use App\Http\Controllers\Portal\ProfileController;
 use App\Http\Controllers\Portal\RegisterController;
 use App\Http\Controllers\Portal\WalletController;
@@ -22,4 +23,7 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:customer'])
         Route::get('wallet', [WalletController::class, 'index'])
             ->middleware('permission:wallet.view')
             ->name('wallet.index');
+        Route::get('deposits', [DepositController::class, 'index'])
+            ->middleware('permission:deposits.view')
+            ->name('deposits.index');
     });

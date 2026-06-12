@@ -93,4 +93,12 @@ class Customer extends Model
     {
         return $this->hasOne(Wallet::class);
     }
+
+    /**
+     * @return HasOne<CustomerDeposit, $this>
+     */
+    public function deposit(): HasOne
+    {
+        return $this->hasOne(CustomerDeposit::class);
+    }
 }

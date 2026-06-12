@@ -10,6 +10,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\ProductStatus;
 use App\ProductType;
+use App\Services\DepositService;
 use App\Services\WalletService;
 use App\TenantStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -114,6 +115,21 @@ class DatabaseSeeder extends Seeder
             openingBalance: '500.00',
             lowBalanceThreshold: '100.00',
             createdBy: $supplierAdmin->id,
+        );
+
+        $jarProduct = Product::query()
+            ->where('tenant_id', $tenant->id)
+            ->where('sku', 'JAR-20L')
+            ->firstOrFail();
+
+        $deposit = app(DepositService::class)->ensureForCustomer($customer);
+
+        app(DepositService::class)->collect(
+            deposit: $deposit,
+            product: $jarProduct,
+            jarCount: 2,
+            createdBy: $supplierAdmin->id,
+            description: 'Initial deposit for 2 × 20L jars',
         );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerDepositController;
 use App\Http\Controllers\Admin\CustomerWalletController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
@@ -62,6 +63,19 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
             Route::patch('customers/{managedCustomer}/wallet/threshold', [CustomerWalletController::class, 'updateThreshold'])
                 ->middleware('permission:wallet.adjust')
                 ->name('customers.wallet.threshold');
+
+            Route::get('customers/{managedCustomer}/deposits', [CustomerDepositController::class, 'show'])
+                ->middleware('permission:deposits.view')
+                ->name('customers.deposits');
+            Route::post('customers/{managedCustomer}/deposits/collect', [CustomerDepositController::class, 'collect'])
+                ->middleware('permission:deposits.collect')
+                ->name('customers.deposits.collect');
+            Route::post('customers/{managedCustomer}/deposits/refund', [CustomerDepositController::class, 'refund'])
+                ->middleware('permission:deposits.refund')
+                ->name('customers.deposits.refund');
+            Route::post('customers/{managedCustomer}/deposits/adjust', [CustomerDepositController::class, 'adjust'])
+                ->middleware('permission:deposits.adjust')
+                ->name('customers.deposits.adjust');
         });
 
         Route::middleware('permission:products.view')->group(function (): void {
