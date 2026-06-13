@@ -101,4 +101,20 @@ class Customer extends Model
     {
         return $this->hasOne(CustomerDeposit::class);
     }
+
+    /**
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * @return HasMany<Subscription, $this>
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

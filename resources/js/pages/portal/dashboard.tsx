@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { dashboard } from '@/routes/portal';
 import { edit } from '@/routes/portal/profile';
 import { index as depositsIndex } from '@/routes/portal/deposits';
+import { index as ordersIndex } from '@/routes/portal/orders';
+import { show as subscriptionShow } from '@/routes/portal/subscription';
 import { index as walletIndex } from '@/routes/portal/wallet';
 
 export default function PortalDashboard() {
@@ -22,8 +24,8 @@ export default function PortalDashboard() {
                     <CardContent className="flex flex-col gap-4 py-8">
                         <p className="text-sm text-muted-foreground">
                             Welcome to your Jalwala customer portal. View your
-                            wallet balance, jar deposits, and manage your
-                            profile.
+                            wallet balance, jar deposits, place orders, and
+                            manage your profile.
                         </p>
                         <div className="flex flex-col gap-2 sm:flex-row">
                             <Button asChild className="min-h-11 w-full sm:w-auto">
@@ -36,6 +38,22 @@ export default function PortalDashboard() {
                             >
                                 <Link href={depositsIndex()}>
                                     View deposits
+                                </Link>
+                            </Button>
+                            <Button
+                                asChild
+                                variant="outline"
+                                className="min-h-11 w-full sm:w-auto"
+                            >
+                                <Link href={ordersIndex()}>View orders</Link>
+                            </Button>
+                            <Button
+                                asChild
+                                variant="outline"
+                                className="min-h-11 w-full sm:w-auto"
+                            >
+                                <Link href={subscriptionShow()}>
+                                    View subscription
                                 </Link>
                             </Button>
                             <Button

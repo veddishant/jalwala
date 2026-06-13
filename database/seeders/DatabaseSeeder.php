@@ -11,6 +11,7 @@ use App\Models\User;
 use App\ProductStatus;
 use App\ProductType;
 use App\Services\DepositService;
+use App\Services\SubscriptionService;
 use App\Services\WalletService;
 use App\TenantStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -130,6 +131,19 @@ class DatabaseSeeder extends Seeder
             jarCount: 2,
             createdBy: $supplierAdmin->id,
             description: 'Initial deposit for 2 × 20L jars',
+        );
+
+        $address = CustomerAddress::query()
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
+        app(SubscriptionService::class)->create(
+            customer: $customer,
+            address: $address,
+            items: [['product_id' => $jarProduct->id, 'quantity' => 1]],
+            daysOfWeek: [1, 3, 5],
+            startDate: now()->toDateString(),
+            notes: 'Demo weekly delivery — Mon, Wed, Fri',
         );
     }
 }

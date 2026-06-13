@@ -1,9 +1,9 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    BookOpen,
-    FolderGit2,
     LayoutGrid,
     Package,
+    RefreshCw,
+    ShoppingBag,
     UserRound,
     Users,
 } from 'lucide-react';
@@ -21,7 +21,9 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { index as adminCustomersIndex } from '@/routes/admin/customers';
+import { index as adminOrdersIndex } from '@/routes/admin/orders';
 import { index as adminProductsIndex } from '@/routes/admin/products';
+import { index as adminSubscriptionsIndex } from '@/routes/admin/subscriptions';
 import { index as adminUsersIndex } from '@/routes/admin/users';
 import { dashboard } from '@/routes';
 import type { Auth, NavItem } from '@/types';
@@ -58,6 +60,22 @@ function useMainNavItems(): NavItem[] {
             title: 'Products',
             href: adminProductsIndex(),
             icon: Package,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('orders.view')) {
+        items.push({
+            title: 'Orders',
+            href: adminOrdersIndex(),
+            icon: ShoppingBag,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('subscriptions.view')) {
+        items.push({
+            title: 'Subscriptions',
+            href: adminSubscriptionsIndex(),
+            icon: RefreshCw,
         });
     }
 

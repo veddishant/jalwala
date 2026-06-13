@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerDepositController;
 use App\Http\Controllers\Admin\CustomerWalletController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,5 +103,51 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
             Route::post('products/{managedProduct}/activate', [ProductController::class, 'activate'])
                 ->middleware('permission:products.deactivate')
                 ->name('products.activate');
+        });
+
+        Route::middleware('permission:orders.view')->group(function (): void {
+            Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+            Route::get('orders/create', [OrderController::class, 'create'])
+                ->middleware('permission:orders.create')
+                ->name('orders.create');
+            Route::post('orders', [OrderController::class, 'store'])
+                ->middleware('permission:orders.create')
+                ->name('orders.store');
+            Route::get('orders/{managedOrder}', [OrderController::class, 'show'])->name('orders.show');
+            Route::post('orders/{managedOrder}/confirm', [OrderController::class, 'confirm'])
+                ->middleware('permission:orders.confirm')
+                ->name('orders.confirm');
+            Route::post('orders/{managedOrder}/cancel', [OrderController::class, 'cancel'])
+                ->middleware('permission:orders.cancel')
+                ->name('orders.cancel');
+            Route::post('orders/{managedOrder}/transition', [OrderController::class, 'transition'])
+                ->middleware('permission:orders.update')
+                ->name('orders.transition');
+        });
+
+        Route::middleware('permission:subscriptions.view')->group(function (): void {
+            Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+            Route::get('subscriptions/create', [SubscriptionController::class, 'create'])
+                ->middleware('permission:subscriptions.create')
+                ->name('subscriptions.create');
+            Route::post('subscriptions', [SubscriptionController::class, 'store'])
+                ->middleware('permission:subscriptions.create')
+                ->name('subscriptions.store');
+            Route::get('subscriptions/{managedSubscription}', [SubscriptionController::class, 'show'])->name('subscriptions.show');
+            Route::get('subscriptions/{managedSubscription}/edit', [SubscriptionController::class, 'edit'])
+                ->middleware('permission:subscriptions.update')
+                ->name('subscriptions.edit');
+            Route::put('subscriptions/{managedSubscription}', [SubscriptionController::class, 'update'])
+                ->middleware('permission:subscriptions.update')
+                ->name('subscriptions.update');
+            Route::post('subscriptions/{managedSubscription}/pause', [SubscriptionController::class, 'pause'])
+                ->middleware('permission:subscriptions.pause')
+                ->name('subscriptions.pause');
+            Route::post('subscriptions/{managedSubscription}/resume', [SubscriptionController::class, 'resume'])
+                ->middleware('permission:subscriptions.resume')
+                ->name('subscriptions.resume');
+            Route::post('subscriptions/{managedSubscription}/cancel', [SubscriptionController::class, 'cancel'])
+                ->middleware('permission:subscriptions.cancel')
+                ->name('subscriptions.cancel');
         });
     });

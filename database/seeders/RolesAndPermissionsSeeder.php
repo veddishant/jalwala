@@ -113,6 +113,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'deposits.view-ledger',
             'subscriptions.view',
             'subscriptions.pause',
+            'subscriptions.resume',
             'orders.view',
             'orders.create',
             'orders.cancel',
