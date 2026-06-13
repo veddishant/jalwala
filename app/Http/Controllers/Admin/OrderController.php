@@ -218,7 +218,7 @@ class OrderController extends Controller
             ->with([
                 'customer:id,name,code,phone',
                 'address',
-                'items.product:id,name,sku',
+                'items.product:id,name,sku,is_returnable',
                 'statusHistories.changedBy:id,name',
                 'createdBy:id,name',
             ])
@@ -294,11 +294,21 @@ class OrderController extends Controller
             return back()->withErrors(['status' => __('Invalid status transition.')]);
         }
 
+        $emptiesCollected = collect($request->validated('empties_collected') ?? [])
+            ->map(fn (array $item): array => [
+                'product_id' => (int) $item['product_id'],
+                'quantity' => (int) $item['quantity'],
+            ])
+            ->filter(fn (array $item): bool => $item['quantity'] > 0)
+            ->values()
+            ->all();
+
         $this->orderService->transition(
             order: $order,
             toStatus: $toStatus,
             changedBy: (int) $request->user()->id,
             notes: $request->validated('notes'),
+            emptiesCollected: $emptiesCollected,
         );
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Order status updated.')]);
@@ -362,8 +372,10 @@ class OrderController extends Controller
                 'delivery_instructions' => $order->address?->delivery_instructions,
             ],
             'items' => $order->items->map(fn ($item): array => [
+                'product_id' => $item->product_id,
                 'product_name' => $item->product?->name,
                 'product_sku' => $item->product?->sku,
+                'is_returnable' => (bool) $item->product?->is_returnable,
                 'quantity' => $item->quantity,
                 'unit_price' => $item->unit_price,
                 'line_total' => $item->line_total,

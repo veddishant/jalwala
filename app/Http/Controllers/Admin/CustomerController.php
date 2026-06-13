@@ -12,6 +12,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Services\CustomerOnboardingService;
 use App\Services\DepositService;
+use App\Services\InventoryService;
 use App\Support\TenantContext;
 use App\TenantStatus;
 use App\UserStatus;
@@ -27,6 +28,7 @@ class CustomerController extends Controller
     public function __construct(
         private CustomerOnboardingService $onboardingService,
         private DepositService $depositService,
+        private InventoryService $inventoryService,
     ) {}
 
     private function ensureTenantContext(Request $request): void
@@ -273,6 +275,11 @@ class CustomerController extends Controller
             deposit: $deposit,
             createdBy: (int) $request->user()->id,
             description: 'Full deposit refund on customer closure',
+        );
+
+        $this->inventoryService->settleOnCustomerClosure(
+            customer: $customer,
+            createdBy: (int) $request->user()->id,
         );
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Customer closed successfully.')]);

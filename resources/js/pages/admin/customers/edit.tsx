@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { deposits, edit, index, wallet } from '@/routes/admin/customers';
+import { deposits, edit, index, inventory, wallet } from '@/routes/admin/customers';
 
 type ManagedCustomer = {
     id: number;
@@ -61,6 +61,9 @@ export default function EditCustomer({
                 </Button>
                 <Button asChild variant="outline" className="min-h-10">
                     <Link href={deposits(customer.id)}>View deposits</Link>
+                </Button>
+                <Button asChild variant="outline" className="min-h-10">
+                    <Link href={inventory(customer.id)}>View inventory</Link>
                 </Button>
             </div>
 

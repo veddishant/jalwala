@@ -59,8 +59,10 @@ type OrderDetail = {
         delivery_instructions: string | null;
     };
     items: Array<{
+        product_id: number;
         product_name: string;
         product_sku: string;
+        is_returnable: boolean;
         quantity: number;
         unit_price: string;
         line_total: string;
@@ -170,6 +172,9 @@ export default function ShowOrder({
         nextStatuses[0]?.value ?? '',
     );
 
+    const returnableItems = order.items.filter((item) => item.is_returnable);
+    const showEmptiesCollected = transitionStatus === 'delivered';
+
     return (
         <>
             <Head title={`Order ${order.uuid.slice(0, 8)}`} />
@@ -275,6 +280,57 @@ export default function ShowOrder({
                                                         )}
                                                     </select>
                                                 </div>
+                                                {showEmptiesCollected &&
+                                                    returnableItems.length >
+                                                        0 && (
+                                                        <div className="grid w-full gap-2 sm:col-span-2">
+                                                            <Label>
+                                                                Empties
+                                                                collected
+                                                                (optional)
+                                                            </Label>
+                                                            {returnableItems.map(
+                                                                (
+                                                                    item,
+                                                                    index,
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            item.product_id
+                                                                        }
+                                                                        className="flex flex-wrap items-center gap-2"
+                                                                    >
+                                                                        <input
+                                                                            type="hidden"
+                                                                            name={`empties_collected[${index}][product_id]`}
+                                                                            value={
+                                                                                item.product_id
+                                                                            }
+                                                                        />
+                                                                        <span className="min-w-32 text-sm">
+                                                                            {
+                                                                                item.product_name
+                                                                            }
+                                                                        </span>
+                                                                        <Input
+                                                                            name={`empties_collected[${index}][quantity]`}
+                                                                            type="number"
+                                                                            min={
+                                                                                0
+                                                                            }
+                                                                            max={
+                                                                                999
+                                                                            }
+                                                                            defaultValue={
+                                                                                0
+                                                                            }
+                                                                            className="min-h-10 w-24"
+                                                                        />
+                                                                    </div>
+                                                                ),
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 <Button
                                                     type="submit"
                                                     variant="outline"

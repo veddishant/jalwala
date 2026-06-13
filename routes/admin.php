@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerDepositController;
+use App\Http\Controllers\Admin\CustomerInventoryController;
 use App\Http\Controllers\Admin\CustomerWalletController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -78,6 +80,23 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
             Route::post('customers/{managedCustomer}/deposits/adjust', [CustomerDepositController::class, 'adjust'])
                 ->middleware('permission:deposits.adjust')
                 ->name('customers.deposits.adjust');
+
+            Route::get('customers/{managedCustomer}/inventory', [CustomerInventoryController::class, 'show'])
+                ->middleware('permission:inventory.view-customer')
+                ->name('customers.inventory');
+            Route::post('customers/{managedCustomer}/inventory/adjust', [CustomerInventoryController::class, 'adjust'])
+                ->middleware('permission:inventory.adjust')
+                ->name('customers.inventory.adjust');
+        });
+
+        Route::middleware('permission:inventory.view')->group(function (): void {
+            Route::get('inventory', [InventoryController::class, 'index'])->name('inventory.index');
+            Route::post('inventory/receive', [InventoryController::class, 'receiveStock'])
+                ->middleware('permission:inventory.adjust')
+                ->name('inventory.receive');
+            Route::post('inventory/adjust', [InventoryController::class, 'adjust'])
+                ->middleware('permission:inventory.adjust')
+                ->name('inventory.adjust');
         });
 
         Route::middleware('permission:products.view')->group(function (): void {

@@ -35,6 +35,9 @@ class TransitionOrderRequest extends FormRequest
                 ]),
             ],
             'notes' => ['nullable', 'string', 'max:500'],
+            'empties_collected' => ['nullable', 'array'],
+            'empties_collected.*.product_id' => ['required', 'integer', 'exists:products,id'],
+            'empties_collected.*.quantity' => ['required', 'integer', 'min:0', 'max:999'],
         ];
     }
 }

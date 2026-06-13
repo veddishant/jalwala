@@ -6,6 +6,7 @@ import {
     ShoppingBag,
     UserRound,
     Users,
+    Warehouse,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -21,6 +22,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { index as adminCustomersIndex } from '@/routes/admin/customers';
+import { index as adminInventoryIndex } from '@/routes/admin/inventory';
 import { index as adminOrdersIndex } from '@/routes/admin/orders';
 import { index as adminProductsIndex } from '@/routes/admin/products';
 import { index as adminSubscriptionsIndex } from '@/routes/admin/subscriptions';
@@ -76,6 +78,14 @@ function useMainNavItems(): NavItem[] {
             title: 'Subscriptions',
             href: adminSubscriptionsIndex(),
             icon: RefreshCw,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('inventory.view')) {
+        items.push({
+            title: 'Inventory',
+            href: adminInventoryIndex(),
+            icon: Warehouse,
         });
     }
 

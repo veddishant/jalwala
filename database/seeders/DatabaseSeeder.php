@@ -11,6 +11,7 @@ use App\Models\User;
 use App\ProductStatus;
 use App\ProductType;
 use App\Services\DepositService;
+use App\Services\InventoryService;
 use App\Services\SubscriptionService;
 use App\Services\WalletService;
 use App\TenantStatus;
@@ -131,6 +132,38 @@ class DatabaseSeeder extends Seeder
             jarCount: 2,
             createdBy: $supplierAdmin->id,
             description: 'Initial deposit for 2 × 20L jars',
+        );
+
+        $inventoryService = app(InventoryService::class);
+        $warehouse = $inventoryService->ensureWarehouseLocation($tenant);
+        $customerLocation = $inventoryService->ensureCustomerLocation($customer);
+
+        $inventoryService->receiveStock(
+            location: $warehouse,
+            product: $jarProduct,
+            quantity: 50,
+            createdBy: $supplierAdmin->id,
+            notes: 'Initial warehouse stock',
+        );
+
+        $inventoryService->adjust(
+            location: $warehouse,
+            product: $jarProduct,
+            jarType: 'filled',
+            direction: 'decrease',
+            quantity: 2,
+            reason: 'Issued to customer on signup',
+            createdBy: $supplierAdmin->id,
+        );
+
+        $inventoryService->adjust(
+            location: $customerLocation,
+            product: $jarProduct,
+            jarType: 'filled',
+            direction: 'increase',
+            quantity: 2,
+            reason: 'Initial jars at customer premises',
+            createdBy: $supplierAdmin->id,
         );
 
         $address = CustomerAddress::query()

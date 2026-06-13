@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderDelivered;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Order;
@@ -215,8 +216,9 @@ class OrderService
         OrderStatus $toStatus,
         ?int $changedBy = null,
         ?string $notes = null,
+        array $emptiesCollected = [],
     ): Order {
-        return DB::transaction(function () use ($order, $toStatus, $changedBy, $notes): Order {
+        return DB::transaction(function () use ($order, $toStatus, $changedBy, $notes, $emptiesCollected): Order {
             $lockedOrder = Order::query()->lockForUpdate()->findOrFail($order->id);
             $fromStatus = $lockedOrder->status;
 
@@ -252,7 +254,13 @@ class OrderService
                 notes: $notes,
             );
 
-            return $lockedOrder->fresh(['items.product', 'customer', 'address', 'statusHistories.changedBy']);
+            $freshOrder = $lockedOrder->fresh(['items.product', 'customer', 'address', 'statusHistories.changedBy']);
+
+            if ($toStatus === OrderStatus::Delivered && $freshOrder !== null) {
+                OrderDelivered::dispatch($freshOrder, $emptiesCollected, $changedBy);
+            }
+
+            return $freshOrder ?? $lockedOrder;
         });
     }
 

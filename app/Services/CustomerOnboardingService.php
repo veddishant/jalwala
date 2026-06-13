@@ -15,6 +15,7 @@ class CustomerOnboardingService
 {
     public function __construct(
         private WalletService $walletService,
+        private InventoryService $inventoryService,
     ) {}
 
     /**
@@ -91,6 +92,8 @@ class CustomerOnboardingService
                 lowBalanceThreshold: $lowBalanceThreshold,
                 createdBy: $createdBy,
             );
+
+            $this->inventoryService->ensureCustomerLocation($customer);
 
             return $customer->load(['addresses', 'user', 'wallet']);
         });
