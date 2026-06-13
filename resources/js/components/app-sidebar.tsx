@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
+    BarChart3,
     LayoutGrid,
     Package,
     RefreshCw,
@@ -24,6 +25,7 @@ import {
 import { index as adminCustomersIndex } from '@/routes/admin/customers';
 import { index as adminInventoryIndex } from '@/routes/admin/inventory';
 import { index as adminOrdersIndex } from '@/routes/admin/orders';
+import { index as adminReportsIndex } from '@/routes/admin/reports';
 import { index as adminProductsIndex } from '@/routes/admin/products';
 import { index as adminSubscriptionsIndex } from '@/routes/admin/subscriptions';
 import { index as adminUsersIndex } from '@/routes/admin/users';
@@ -86,6 +88,18 @@ function useMainNavItems(): NavItem[] {
             title: 'Inventory',
             href: adminInventoryIndex(),
             icon: Warehouse,
+        });
+    }
+
+    if (
+        auth.user?.permissions?.some((permission) =>
+            permission.startsWith('reports.'),
+        )
+    ) {
+        items.push({
+            title: 'Reports',
+            href: adminReportsIndex(),
+            icon: BarChart3,
         });
     }
 

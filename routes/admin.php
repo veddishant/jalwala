@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CustomerWalletController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -97,6 +98,12 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
             Route::post('inventory/adjust', [InventoryController::class, 'adjust'])
                 ->middleware('permission:inventory.adjust')
                 ->name('inventory.adjust');
+        });
+
+        Route::middleware('permission:reports.sales|reports.consumption|reports.wallet|reports.deposits|reports.outstanding|reports.agent-performance')->group(function (): void {
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+            Route::get('reports/{type}', [ReportController::class, 'show'])->name('reports.show');
+            Route::get('reports/{type}/export', [ReportController::class, 'export'])->name('reports.export');
         });
 
         Route::middleware('permission:products.view')->group(function (): void {
