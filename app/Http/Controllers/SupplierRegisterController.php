@@ -59,7 +59,7 @@ class SupplierRegisterController extends Controller
 
         Auth::login($admin);
 
-        return to_route('admin.customers.index')
+        return to_route('admin.dashboard')
             ->with('status', 'Welcome! Your supplier account is ready.');
     }
 }

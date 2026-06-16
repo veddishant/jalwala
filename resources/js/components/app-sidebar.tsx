@@ -24,6 +24,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { index as adminCustomersIndex } from '@/routes/admin/customers';
+import { dashboard as adminDashboard } from '@/routes/admin';
 import { index as adminInventoryIndex } from '@/routes/admin/inventory';
 import { index as adminOrdersIndex } from '@/routes/admin/orders';
 import { index as adminReportsIndex } from '@/routes/admin/reports';
@@ -56,7 +57,9 @@ function useMainNavItems(): NavItem[] {
     } else {
         items.push({
             title: 'Dashboard',
-            href: dashboard(),
+            href: auth.user?.permissions?.includes('customers.view')
+                ? adminDashboard()
+                : dashboard(),
             icon: LayoutGrid,
         });
     }

@@ -24,7 +24,7 @@ test('guest can register a new supplier tenant', function () {
         'password' => 'password123',
         'password_confirmation' => 'password123',
     ])
-        ->assertRedirect(route('admin.customers.index'));
+        ->assertRedirect(route('admin.dashboard'));
 
     $tenant = Tenant::query()->where('slug', 'fresh-springs')->first();
 
@@ -51,7 +51,7 @@ test('supplier registration generates slug when not provided', function () {
         'password' => 'password123',
         'password_confirmation' => 'password123',
     ])
-        ->assertRedirect(route('admin.customers.index'));
+        ->assertRedirect(route('admin.dashboard'));
 
     $tenant = Tenant::query()->where('name', 'Blue Drop Delivery')->first();
 

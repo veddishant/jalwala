@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerDepositController;
 use App\Http\Controllers\Admin\CustomerInventoryController;
 use App\Http\Controllers\Admin\CustomerWalletController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -16,6 +17,8 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:supplier-admin|super-admi
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
         Route::middleware('permission:users.view')->group(function (): void {
             Route::get('users', [UserController::class, 'index'])->name('users.index');
             Route::get('users/create', [UserController::class, 'create'])

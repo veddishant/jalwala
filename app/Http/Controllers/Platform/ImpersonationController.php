@@ -16,7 +16,7 @@ class ImpersonationController extends Controller
         $request->session()->put('active_tenant_id', $tenant->id);
         $request->session()->put('impersonating_tenant', true);
 
-        return to_route('admin.customers.index')
+        return to_route('admin.dashboard')
             ->with('status', "Now viewing {$tenant->name} as support.");
     }
 

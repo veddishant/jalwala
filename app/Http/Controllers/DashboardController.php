@@ -22,7 +22,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('supplier-admin')) {
-            return redirect()->route('admin.customers.index');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->hasRole('customer')) {

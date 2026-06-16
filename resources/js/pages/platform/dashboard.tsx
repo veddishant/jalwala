@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Building2, PauseCircle, Users } from 'lucide-react';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import { dashboard as platformDashboard } from '@/routes/platform';
 import { index as tenantsIndex, show } from '@/routes/platform/tenants';
+import type { Auth } from '@/types';
 
 type TenantSummary = {
     id: number;
@@ -50,13 +51,15 @@ export default function PlatformDashboard({
     stats: Stats;
     recentTenants: TenantSummary[];
 }) {
+    const { auth } = usePage<{ auth: Auth }>().props;
+
     return (
         <>
             <Head title="Platform" />
 
             <div className="flex flex-col gap-6 p-4 md:p-6">
                 <Heading
-                    title="Platform overview"
+                    title={`Welcome${auth.user?.name ? `, ${auth.user.name}` : ''}`}
                     description="Monitor suppliers, trials, and tenant health across Jalwala."
                 />
 

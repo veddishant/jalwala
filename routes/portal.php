@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\DepositController;
 use App\Http\Controllers\Portal\OrderController;
 use App\Http\Controllers\Portal\ProfileController;
@@ -19,7 +20,7 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:customer'])
     ->prefix('portal')
     ->name('portal.')
     ->group(function (): void {
-        Route::inertia('/', 'portal/dashboard')->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('wallet', [WalletController::class, 'index'])

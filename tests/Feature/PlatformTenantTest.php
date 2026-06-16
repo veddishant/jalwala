@@ -105,7 +105,7 @@ test('super admin can impersonate an active tenant', function () {
 
     $this->actingAs($superAdmin)
         ->post(route('platform.impersonate.store', $tenant))
-        ->assertRedirect(route('admin.customers.index'))
+        ->assertRedirect(route('admin.dashboard'))
         ->assertSessionHas('active_tenant_id', $tenant->id)
         ->assertSessionHas('impersonating_tenant', true);
 
@@ -114,7 +114,7 @@ test('super admin can impersonate an active tenant', function () {
             'active_tenant_id' => $tenant->id,
             'impersonating_tenant' => true,
         ])
-        ->get(route('admin.customers.index'))
+        ->get(route('admin.dashboard'))
         ->assertOk();
 });
 
