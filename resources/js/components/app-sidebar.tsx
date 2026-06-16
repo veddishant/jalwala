@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
     Building2,
+    Inbox,
     LayoutGrid,
     Package,
     RefreshCw,
@@ -34,6 +35,7 @@ import { index as adminUsersIndex } from '@/routes/admin/users';
 import { dashboard } from '@/routes';
 import { dashboard as platformDashboard } from '@/routes/platform';
 import { index as platformTenantsIndex } from '@/routes/platform/tenants';
+import { index as platformInquiriesIndex } from '@/routes/platform/inquiries';
 import type { Auth, NavItem } from '@/types';
 
 function useMainNavItems(): NavItem[] {
@@ -54,7 +56,20 @@ function useMainNavItems(): NavItem[] {
                 icon: Building2,
             },
         );
-    } else {
+    }
+
+    if (auth.user?.permissions?.includes('platform.inquiries.view')) {
+        items.push({
+            title: 'Inquiries',
+            href: platformInquiriesIndex(),
+            icon: Inbox,
+        });
+    }
+
+    if (
+        !auth.user?.permissions?.includes('platform.tenants.view') &&
+        !auth.user?.permissions?.includes('platform.inquiries.view')
+    ) {
         items.push({
             title: 'Dashboard',
             href: auth.user?.permissions?.includes('customers.view')

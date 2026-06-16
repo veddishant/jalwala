@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Platform\DashboardController;
 use App\Http\Controllers\Platform\ImpersonationController;
+use App\Http\Controllers\Platform\InquiryController;
 use App\Http\Controllers\Platform\TenantController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +37,14 @@ Route::middleware(['auth', 'verified', 'tenant', 'role:super-admin'])
         Route::middleware('permission:platform.tenants.suspend')->group(function (): void {
             Route::post('tenants/{tenant}/suspend', [TenantController::class, 'suspend'])->name('tenants.suspend');
             Route::post('tenants/{tenant}/activate', [TenantController::class, 'activate'])->name('tenants.activate');
+        });
+
+        Route::middleware('permission:platform.inquiries.view')->group(function (): void {
+            Route::get('inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
+            Route::get('inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
+        });
+
+        Route::middleware('permission:platform.inquiries.update')->group(function (): void {
+            Route::post('inquiries/{inquiry}/archive', [InquiryController::class, 'archive'])->name('inquiries.archive');
         });
     });

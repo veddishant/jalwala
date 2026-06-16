@@ -16,7 +16,8 @@ import { register as supplierRegister } from '@/routes/supplier';
 const navLinks = [
     { label: 'Features', href: '#features' },
     { label: 'How it works', href: '#how-it-works' },
-    { label: 'For suppliers', href: '#for-suppliers' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
 ];
 
 export function LandingNav() {

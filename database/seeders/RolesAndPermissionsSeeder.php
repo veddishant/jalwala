@@ -17,6 +17,8 @@ class RolesAndPermissionsSeeder extends Seeder
         'platform.tenants.create',
         'platform.tenants.update',
         'platform.tenants.suspend',
+        'platform.inquiries.view',
+        'platform.inquiries.update',
         'users.view',
         'users.create',
         'users.update',

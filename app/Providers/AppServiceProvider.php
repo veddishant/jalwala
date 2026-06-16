@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Inquiry;
 use App\Models\Tenant;
+use App\Policies\InquiryPolicy;
 use App\Policies\ReportPolicy;
 use App\Policies\TenantPolicy;
 use App\ReportType;
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(ReportType::class, ReportPolicy::class);
         Gate::policy(Tenant::class, TenantPolicy::class);
+        Gate::policy(Inquiry::class, InquiryPolicy::class);
 
         $this->configureDefaults();
     }

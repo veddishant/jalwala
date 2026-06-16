@@ -6,7 +6,11 @@ import {
     CalendarClock,
     CheckCircle2,
     Droplets,
+    Heart,
     LineChart,
+    Mail,
+    MapPin,
+    MessageSquare,
     Package,
     RefreshCw,
     Shield,
@@ -15,6 +19,7 @@ import {
     Users,
     Wallet,
 } from 'lucide-react';
+import { ContactInquiryForm } from '@/components/marketing/contact-inquiry-form';
 import { HeroVisual } from '@/components/marketing/hero-visual';
 import { LandingNav } from '@/components/marketing/landing-nav';
 import { Button } from '@/components/ui/button';
@@ -99,6 +104,27 @@ const highlights = [
     { icon: Smartphone, label: 'Mobile-first UI' },
     { icon: Shield, label: 'Role-based access' },
     { icon: RefreshCw, label: 'Real-time sync' },
+];
+
+const aboutValues = [
+    {
+        icon: Droplets,
+        title: 'Built for water delivery',
+        description:
+            'Jar deposits, subscriptions, and wallet billing — not generic e-commerce adapted for water.',
+    },
+    {
+        icon: Heart,
+        title: 'Customer-first design',
+        description:
+            'Suppliers run operations; end customers get a simple portal to order, pay, and track deliveries.',
+    },
+    {
+        icon: Shield,
+        title: 'Secure & scalable',
+        description:
+            'Multi-tenant architecture with role-based access, so each supplier’s data stays isolated.',
+    },
 ];
 
 export default function Welcome() {
@@ -370,6 +396,127 @@ export default function Welcome() {
                         </div>
                     </section>
 
+                    {/* About */}
+                    <section
+                        id="about"
+                        className="scroll-mt-20 bg-muted/40 py-16 md:py-24"
+                    >
+                        <div className="mx-auto max-w-6xl px-4 md:px-6">
+                            <div className="mx-auto mb-12 max-w-2xl text-center">
+                                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                                    About {name}
+                                </h2>
+                                <p className="mt-4 text-lg text-muted-foreground">
+                                    We help water and jar delivery businesses
+                                    move off spreadsheets and WhatsApp chaos
+                                    onto one reliable platform — from first
+                                    signup to daily delivery runs.
+                                </p>
+                            </div>
+
+                            <div className="grid gap-6 md:grid-cols-3">
+                                {aboutValues.map((item) => {
+                                    const Icon = item.icon;
+
+                                    return (
+                                        <Card
+                                            key={item.title}
+                                            className="border-border/60 bg-background/80"
+                                        >
+                                            <CardHeader>
+                                                <div className="mb-2 flex size-11 items-center justify-center rounded-xl bg-sky-100 text-sky-600 dark:bg-sky-900/40">
+                                                    <Icon className="size-5" />
+                                                </div>
+                                                <CardTitle className="text-lg">
+                                                    {item.title}
+                                                </CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <CardDescription className="text-base leading-relaxed">
+                                                    {item.description}
+                                                </CardDescription>
+                                            </CardContent>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+
+                            <p className="mx-auto mt-10 max-w-3xl text-center text-muted-foreground leading-relaxed">
+                                Whether you are a local water supplier scaling
+                                routes, a franchise onboarding new tenants, or
+                                a customer looking for a better experience —{' '}
+                                {name} is designed to grow with you. Our team
+                                is based in India and understands the realities
+                                of prepaid wallets, returnable jars, and
+                                subscription deliveries.
+                            </p>
+                        </div>
+                    </section>
+
+                    {/* Contact */}
+                    <section
+                        id="contact"
+                        className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 md:px-6 md:py-24"
+                    >
+                        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+                            <div>
+                                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                                    Get in touch
+                                </h2>
+                                <p className="mt-4 text-lg text-muted-foreground">
+                                    Interested in becoming a supplier, partnering
+                                    as a tenant, reporting a bug, or sharing a
+                                    suggestion? Send us a message — we read every
+                                    inquiry.
+                                </p>
+
+                                <ul className="mt-8 space-y-4">
+                                    <li className="flex items-start gap-3 text-muted-foreground">
+                                        <MessageSquare className="mt-0.5 size-5 shrink-0 text-sky-600" />
+                                        <span>
+                                            <strong className="text-foreground">
+                                                Supplier onboarding
+                                            </strong>
+                                            <br />
+                                            Start your 14-day trial or ask about
+                                            enterprise plans.
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-3 text-muted-foreground">
+                                        <Building2 className="mt-0.5 size-5 shrink-0 text-sky-600" />
+                                        <span>
+                                            <strong className="text-foreground">
+                                                New tenant / partnership
+                                            </strong>
+                                            <br />
+                                            Multi-brand or franchise setups on
+                                            the Jalwala platform.
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-3 text-muted-foreground">
+                                        <Mail className="mt-0.5 size-5 shrink-0 text-sky-600" />
+                                        <span>
+                                            <strong className="text-foreground">
+                                                Bugs & suggestions
+                                            </strong>
+                                            <br />
+                                            Help us improve — your feedback shapes
+                                            the product roadmap.
+                                        </span>
+                                    </li>
+                                </ul>
+
+                                <p className="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
+                                    <MapPin className="size-4 shrink-0" />
+                                    Serving water delivery businesses across
+                                    India
+                                </p>
+                            </div>
+
+                            <ContactInquiryForm />
+                        </div>
+                    </section>
+
                     {/* CTA */}
                     <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 md:pb-24">
                         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-600 via-sky-500 to-cyan-500 px-6 py-12 text-center text-white shadow-2xl shadow-sky-500/25 md:px-12 md:py-16">
@@ -416,6 +563,18 @@ export default function Welcome() {
                             management platform.
                         </p>
                         <div className="flex flex-wrap justify-center gap-6">
+                            <a
+                                href="#about"
+                                className="hover:text-foreground"
+                            >
+                                About
+                            </a>
+                            <a
+                                href="#contact"
+                                className="hover:text-foreground"
+                            >
+                                Contact
+                            </a>
                             <a
                                 href="#features"
                                 className="hover:text-foreground"
