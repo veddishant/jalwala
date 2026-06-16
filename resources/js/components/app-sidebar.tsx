@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
+    Building2,
     LayoutGrid,
     Package,
     RefreshCw,
@@ -30,18 +31,35 @@ import { index as adminProductsIndex } from '@/routes/admin/products';
 import { index as adminSubscriptionsIndex } from '@/routes/admin/subscriptions';
 import { index as adminUsersIndex } from '@/routes/admin/users';
 import { dashboard } from '@/routes';
+import { dashboard as platformDashboard } from '@/routes/platform';
+import { index as platformTenantsIndex } from '@/routes/platform/tenants';
 import type { Auth, NavItem } from '@/types';
 
 function useMainNavItems(): NavItem[] {
     const { auth } = usePage<{ auth: Auth }>().props;
 
-    const items: NavItem[] = [
-        {
+    const items: NavItem[] = [];
+
+    if (auth.user?.permissions?.includes('platform.tenants.view')) {
+        items.push(
+            {
+                title: 'Platform',
+                href: platformDashboard(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Tenants',
+                href: platformTenantsIndex(),
+                icon: Building2,
+            },
+        );
+    } else {
+        items.push({
             title: 'Dashboard',
             href: dashboard(),
             icon: LayoutGrid,
-        },
-    ];
+        });
+    }
 
     if (auth.user?.permissions?.includes('users.view')) {
         items.push({

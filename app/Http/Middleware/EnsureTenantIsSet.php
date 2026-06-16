@@ -23,6 +23,12 @@ class EnsureTenantIsSet
         }
 
         if ($user->tenant_id !== null) {
+            $tenant = Tenant::query()->find($user->tenant_id);
+
+            if ($tenant === null || $tenant->status !== TenantStatus::Active) {
+                abort(403, 'Your organization account is not active.');
+            }
+
             TenantContext::setId($user->tenant_id);
 
             return $next($request);
@@ -40,8 +46,12 @@ class EnsureTenantIsSet
                     abort(403, 'Please select a tenant to continue.');
                 }
 
+                $this->ensureTenantIsActive((int) $activeTenantId);
+
                 TenantContext::setId((int) $activeTenantId);
             } elseif ($activeTenantId !== null) {
+                $this->ensureTenantIsActive((int) $activeTenantId);
+
                 TenantContext::setId((int) $activeTenantId);
             } else {
                 TenantContext::bypass();
@@ -104,5 +114,14 @@ class EnsureTenantIsSet
         }
 
         return (int) $activeTenantIds->first();
+    }
+
+    private function ensureTenantIsActive(int $tenantId): void
+    {
+        $tenant = Tenant::query()->find($tenantId);
+
+        if ($tenant === null || $tenant->status !== TenantStatus::Active) {
+            abort(403, 'This tenant is suspended or unavailable.');
+        }
     }
 }

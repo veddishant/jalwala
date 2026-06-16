@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -53,6 +54,34 @@ class Tenant extends Model
     public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
+    }
+
+    /**
+     * @return HasOne<TenantSubscription, $this>
+     */
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(TenantSubscription::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === TenantStatus::Active;
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->status === TenantStatus::Suspended;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function brandingSettings(): array
+    {
+        $settings = $this->settings ?? [];
+
+        return is_array($settings['branding'] ?? null) ? $settings['branding'] : [];
     }
 
     public function getRouteKeyName(): string

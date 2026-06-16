@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Tenant;
 use App\Support\TenantContext;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -37,6 +38,16 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        $tenant = TenantContext::get();
+        $impersonating = false;
+
+        if ($request->hasSession()) {
+            try {
+                $impersonating = (bool) $request->session()->get('impersonating_tenant', false);
+            } catch (\RuntimeException) {
+                //
+            }
+        }
 
         return [
             ...parent::share($request),
@@ -50,7 +61,20 @@ class HandleInertiaRequests extends Middleware
             ],
             'tenant' => [
                 'id' => TenantContext::getId(),
-                'name' => TenantContext::get()?->name,
+                'name' => $tenant?->name,
+                'slug' => $tenant?->slug,
+                'branding' => $tenant?->brandingSettings() ?? [],
+            ],
+            'impersonation' => [
+                'active' => $impersonating && $user?->isSuperAdmin(),
+                'tenant' => $impersonating && $tenant instanceof Tenant ? [
+                    'id' => $tenant->id,
+                    'name' => $tenant->name,
+                    'slug' => $tenant->slug,
+                ] : null,
+            ],
+            'flash' => [
+                'status' => fn () => $request->session()->get('status'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];

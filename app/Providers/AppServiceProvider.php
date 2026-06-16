@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Tenant;
 use App\Policies\ReportPolicy;
+use App\Policies\TenantPolicy;
 use App\ReportType;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(ReportType::class, ReportPolicy::class);
+        Gate::policy(Tenant::class, TenantPolicy::class);
 
         $this->configureDefaults();
     }

@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Product;
 use App\Models\Tenant;
+use App\Models\TenantSubscription;
 use App\Models\User;
 use App\ProductStatus;
 use App\ProductType;
@@ -15,6 +16,7 @@ use App\Services\InventoryService;
 use App\Services\SubscriptionService;
 use App\Services\WalletService;
 use App\TenantStatus;
+use App\TenantSubscriptionStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +39,14 @@ class DatabaseSeeder extends Seeder
             'currency' => 'INR',
             'settings' => [],
             'status' => TenantStatus::Active,
+        ]);
+
+        TenantSubscription::query()->create([
+            'tenant_id' => $tenant->id,
+            'plan' => 'trial',
+            'status' => TenantSubscriptionStatus::Trialing,
+            'trial_ends_at' => now()->addDays(14),
+            'current_period_ends_at' => now()->addDays(14),
         ]);
 
         $superAdmin = User::factory()->superAdmin()->create([

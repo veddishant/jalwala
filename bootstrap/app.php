@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 require __DIR__.'/../routes/admin.php';
                 require __DIR__.'/../routes/agent.php';
                 require __DIR__.'/../routes/portal.php';
+                require __DIR__.'/../routes/platform.php';
             });
         },
     )
