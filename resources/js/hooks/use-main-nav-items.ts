@@ -1,0 +1,144 @@
+import { usePage } from '@inertiajs/react';
+import {
+    BarChart3,
+    Building2,
+    Inbox,
+    LayoutGrid,
+    Package,
+    RefreshCw,
+    ShoppingBag,
+    UserRound,
+    Users,
+    Warehouse,
+} from 'lucide-react';
+import { index as adminCustomersIndex } from '@/routes/admin/customers';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminInventoryIndex } from '@/routes/admin/inventory';
+import { index as adminOrdersIndex } from '@/routes/admin/orders';
+import { index as adminReportsIndex } from '@/routes/admin/reports';
+import { index as adminProductsIndex } from '@/routes/admin/products';
+import { index as adminSubscriptionsIndex } from '@/routes/admin/subscriptions';
+import { index as adminUsersIndex } from '@/routes/admin/users';
+import { dashboard } from '@/routes';
+import { dashboard as platformDashboard } from '@/routes/platform';
+import { index as platformInquiriesIndex } from '@/routes/platform/inquiries';
+import { index as platformTenantsIndex } from '@/routes/platform/tenants';
+import type { Auth, NavItem } from '@/types';
+
+export function useAppHomeHref(): NavItem['href'] {
+    const { auth } = usePage<{ auth: Auth }>().props;
+
+    if (auth.user?.permissions?.includes('platform.tenants.view')) {
+        return platformDashboard();
+    }
+
+    if (auth.user?.permissions?.includes('customers.view')) {
+        return adminDashboard();
+    }
+
+    return dashboard();
+}
+
+export function useMainNavItems(): NavItem[] {
+    const { auth } = usePage<{ auth: Auth }>().props;
+
+    const items: NavItem[] = [];
+
+    if (auth.user?.permissions?.includes('platform.tenants.view')) {
+        items.push(
+            {
+                title: 'Platform',
+                href: platformDashboard(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Tenants',
+                href: platformTenantsIndex(),
+                icon: Building2,
+            },
+        );
+    }
+
+    if (auth.user?.permissions?.includes('platform.inquiries.view')) {
+        items.push({
+            title: 'Inquiries',
+            href: platformInquiriesIndex(),
+            icon: Inbox,
+        });
+    }
+
+    if (
+        !auth.user?.permissions?.includes('platform.tenants.view') &&
+        !auth.user?.permissions?.includes('platform.inquiries.view')
+    ) {
+        items.push({
+            title: 'Dashboard',
+            href: auth.user?.permissions?.includes('customers.view')
+                ? adminDashboard()
+                : dashboard(),
+            icon: LayoutGrid,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('users.view')) {
+        items.push({
+            title: 'Users',
+            href: adminUsersIndex(),
+            icon: Users,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('customers.view')) {
+        items.push({
+            title: 'Customers',
+            href: adminCustomersIndex(),
+            icon: UserRound,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('products.view')) {
+        items.push({
+            title: 'Products',
+            href: adminProductsIndex(),
+            icon: Package,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('orders.view')) {
+        items.push({
+            title: 'Orders',
+            href: adminOrdersIndex(),
+            icon: ShoppingBag,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('subscriptions.view')) {
+        items.push({
+            title: 'Subscriptions',
+            href: adminSubscriptionsIndex(),
+            icon: RefreshCw,
+        });
+    }
+
+    if (auth.user?.permissions?.includes('inventory.view')) {
+        items.push({
+            title: 'Inventory',
+            href: adminInventoryIndex(),
+            icon: Warehouse,
+        });
+    }
+
+    if (
+        auth.user?.permissions?.some((permission) =>
+            permission.startsWith('reports.'),
+        )
+    ) {
+        items.push({
+            title: 'Reports',
+            href: adminReportsIndex(),
+            icon: BarChart3,
+        });
+    }
+
+    return items;
+}

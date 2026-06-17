@@ -82,12 +82,13 @@ export default function AdminDashboard({
                     description="Overview of customers, orders, subscriptions, and wallet alerts."
                 />
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     <StatCard
                         label="Active customers"
                         value={stats.active_customers}
                         icon={Users}
                         href={customersIndex()}
+                        accent="sky"
                     />
                     <StatCard
                         label="Pending orders"
@@ -95,18 +96,21 @@ export default function AdminDashboard({
                         description="Awaiting delivery"
                         icon={ShoppingBag}
                         href={ordersIndex()}
+                        accent="violet"
                     />
                     <StatCard
                         label="Today's deliveries"
                         value={stats.today_deliveries}
                         icon={Package}
                         href={ordersIndex()}
+                        accent="emerald"
                     />
                     <StatCard
                         label="Active subscriptions"
                         value={stats.active_subscriptions}
                         icon={RefreshCw}
                         href={subscriptionsIndex()}
+                        accent="cyan"
                     />
                     <StatCard
                         label="Low wallet balance"
@@ -115,16 +119,18 @@ export default function AdminDashboard({
                         icon={AlertTriangle}
                         valueClassName={
                             stats.low_wallet_customers > 0
-                                ? 'text-amber-600'
+                                ? 'text-amber-600 dark:text-amber-400'
                                 : undefined
                         }
                         href={customersIndex()}
+                        accent="amber"
                     />
                     <StatCard
                         label="Active products"
                         value={stats.active_products}
                         icon={Package}
                         href={productsIndex()}
+                        accent="rose"
                     />
                 </div>
 

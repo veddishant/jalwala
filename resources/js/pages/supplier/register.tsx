@@ -1,5 +1,5 @@
 import { Form, Head, Link } from '@inertiajs/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import SupplierRegisterController from '@/actions/App/Http/Controllers/SupplierRegisterController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -22,6 +22,8 @@ type Defaults = {
 const selectClassName =
     'border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 flex min-h-11 w-full rounded-md border px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px]';
 
+const step1Fields = ['business_name', 'slug', 'timezone', 'currency'] as const;
+
 export default function SupplierRegister({
     defaults,
     timezones,
@@ -32,6 +34,24 @@ export default function SupplierRegister({
     currencies: Option[];
 }) {
     const [step, setStep] = useState(1);
+    const step1Ref = useRef<HTMLDivElement>(null);
+
+    const handleContinue = () => {
+        const fields =
+            step1Ref.current?.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+                'input, select, textarea',
+            );
+
+        if (fields) {
+            for (const field of fields) {
+                if (!field.reportValidity()) {
+                    return;
+                }
+            }
+        }
+
+        setStep(2);
+    };
 
     return (
         <>
@@ -68,12 +88,24 @@ export default function SupplierRegister({
                 <Form
                     {...SupplierRegisterController.store.form()}
                     className="space-y-5"
-                    onSuccess={() => setStep(1)}
+                    onError={(errors) => {
+                        if (
+                            Object.keys(errors).some((key) =>
+                                step1Fields.includes(
+                                    key as (typeof step1Fields)[number],
+                                ),
+                            )
+                        ) {
+                            setStep(1);
+                        }
+                    }}
                 >
                     {({ processing, errors }) => (
                         <>
-                            {step === 1 && (
-                                <div className="space-y-4">
+                            <div
+                                ref={step1Ref}
+                                className={step === 1 ? 'space-y-4' : 'hidden'}
+                            >
                                     <div className="grid gap-2">
                                         <Label htmlFor="business_name">
                                             Business name
@@ -154,15 +186,15 @@ export default function SupplierRegister({
                                     <Button
                                         type="button"
                                         className="min-h-11 w-full"
-                                        onClick={() => setStep(2)}
+                                        onClick={handleContinue}
                                     >
                                         Continue
                                     </Button>
                                 </div>
-                            )}
 
-                            {step === 2 && (
-                                <div className="space-y-4">
+                            <div
+                                className={step === 2 ? 'space-y-4' : 'hidden'}
+                            >
                                     <div className="grid gap-2">
                                         <Label htmlFor="name">Your name</Label>
                                         <Input
@@ -244,7 +276,6 @@ export default function SupplierRegister({
                                         </Button>
                                     </div>
                                 </div>
-                            )}
                         </>
                     )}
                 </Form>

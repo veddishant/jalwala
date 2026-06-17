@@ -55,7 +55,7 @@ export default function EditCustomer({
         <>
             <Head title={`Edit ${customer.name}`} />
 
-            <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 pt-4 md:px-6">
+            <div className="mx-auto flex w-full max-w-2xl flex-wrap items-center gap-2 px-4 pt-4 md:px-6">
                 <Button asChild variant="outline" className="min-h-10">
                     <Link href={wallet(customer.id)}>View wallet</Link>
                 </Button>
@@ -65,44 +65,45 @@ export default function EditCustomer({
                 <Button asChild variant="outline" className="min-h-10">
                     <Link href={inventory(customer.id)}>View inventory</Link>
                 </Button>
-            </div>
 
-            {!isClosed && (
-                <div className="mx-auto flex w-full max-w-2xl flex-wrap gap-2 px-4 md:px-6">
-                    {isActive && (
-                        <Form
-                            {...CustomerController.pause.form(customer.id)}
-                            options={{ preserveScroll: true }}
-                        >
-                            <Button
-                                type="submit"
-                                variant="outline"
-                                className="min-h-10"
+                {!isClosed && (
+                    <>
+                        {isActive && (
+                            <Form
+                                {...CustomerController.pause.form(customer.id)}
+                                options={{ preserveScroll: true }}
+                                className="contents"
                             >
-                                Pause customer
-                            </Button>
-                        </Form>
-                    )}
-                    {isPaused && (
-                        <Form
-                            {...CustomerController.resume.form(customer.id)}
-                            options={{ preserveScroll: true }}
-                        >
-                            <Button
-                                type="submit"
-                                variant="outline"
-                                className="min-h-10"
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="min-h-10"
+                                >
+                                    Pause customer
+                                </Button>
+                            </Form>
+                        )}
+                        {isPaused && (
+                            <Form
+                                {...CustomerController.resume.form(customer.id)}
+                                options={{ preserveScroll: true }}
+                                className="contents"
                             >
-                                Resume customer
-                            </Button>
-                        </Form>
-                    )}
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="destructive" className="min-h-10">
-                                Close customer
-                            </Button>
-                        </DialogTrigger>
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="min-h-10"
+                                >
+                                    Resume customer
+                                </Button>
+                            </Form>
+                        )}
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="destructive" className="min-h-10">
+                                    Close customer
+                                </Button>
+                            </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
                                 <DialogTitle>Close customer</DialogTitle>
@@ -133,9 +134,10 @@ export default function EditCustomer({
                                 </DialogFooter>
                             </Form>
                         </DialogContent>
-                    </Dialog>
-                </div>
-            )}
+                        </Dialog>
+                    </>
+                )}
+            </div>
 
             <CustomerForm
                 title={`Edit ${customer.name}`}
